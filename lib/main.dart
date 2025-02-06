@@ -27,7 +27,11 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
   String condition = "";
 
   void fetchWeatherData() {
-    final List<String> conditions = ['Sunny', 'Cloudy', 'Rainy'];
+    final List<String> conditions = [
+      'Sunny',
+      'Cloudy',
+      'Rainy'
+    ]; //weather options
     final Random random = Random();
 
     setState(() {
