@@ -25,19 +25,31 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
   String city = "";
   String temperature = "";
   String condition = "";
+  List<Map<String, String>> forecast = [];
 
   void fetchWeatherData() {
-    final List<String> conditions = [
-      'Sunny',
-      'Cloudy',
-      'Rainy'
-    ]; //weather options
+    final List<String> conditions = ['Sunny', 'Cloudy', 'Rainy'];
     final Random random = Random();
 
     setState(() {
       city = _cityController.text;
-      temperature = "${15 + random.nextInt(16)}°C"; //picks a random temperature
+      temperature = "${15 + random.nextInt(16)}°C";
       condition = conditions[random.nextInt(conditions.length)];
+    });
+  }
+
+  void fetch7DayForecast() {
+    final List<String> conditions = ['Sunny', 'Cloudy', 'Rainy'];
+    final Random random = Random();
+
+    setState(() {
+      forecast = List.generate(7, (index) {
+        return {
+          "day": "Day ${index + 1}",
+          "temperature": "${15 + random.nextInt(16)}°C",
+          "condition": conditions[random.nextInt(conditions.length)]
+        };
+      });
     });
   }
 
@@ -66,6 +78,28 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
             Text('City: $city', style: TextStyle(fontSize: 20)),
             Text('Temperature: $temperature', style: TextStyle(fontSize: 20)),
             Text('Condition: $condition', style: TextStyle(fontSize: 20)),
+            SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: fetch7DayForecast,
+              child: Text('Fetch 7-Day Forecast'),
+            ),
+            SizedBox(height: 20),
+            forecast.isNotEmpty
+                ? Expanded(
+                    child: ListView.builder(
+                      itemCount: forecast.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: ListTile(
+                            title: Text(forecast[index]['day']!),
+                            subtitle: Text(
+                                "${forecast[index]['temperature']} - ${forecast[index]['condition']}"),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),
